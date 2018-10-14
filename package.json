@@ -1,0 +1,11 @@
+{
+  "name": "k3kchan",
+  "version": "0.0.1",
+  "description": "k3kchan - El bot del K3K",
+  "main": "bot.js",
+  "author": "Mr Tinez",
+  "dependencies": {
+    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+    "winston": "^3.1.0"
+  }
+}
