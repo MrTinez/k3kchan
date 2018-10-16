@@ -2,10 +2,35 @@
   "name": "k3kchan",
   "version": "0.0.1",
   "description": "k3kchan - El bot del K3K",
-  "main": "bot.js",
+  "main": "./app/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrTinez/k3kchan.git"
+  },
+  "keywords": [
+    "destiny",
+    "destiny_2",
+    "api",
+    "discord",
+    "discord_bot",
+    "clan"
+  ],
   "author": "Mr Tinez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrTinez/k3kchan/issues"
+  },
+  "homepage": "https://github.com/MrTinez/k3kchan#readme",
   "dependencies": {
-    "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
-    "winston": "^3.1.0"
-  }
+    "discord.js": "^11.4.2",
+    "dotenv": "^6.1.0",
+    "eslint": "^5.7.0",
+    "npm": "^6.4.1"
+  },
+  "devDependencies": {}
 }

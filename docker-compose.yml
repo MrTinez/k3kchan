@@ -1,0 +1,7 @@
+version: '3'
+services:
+  k3kchan:
+    build: .
+    restart: always
+    volumes:
+      - .:/usr/src/k3kchan
