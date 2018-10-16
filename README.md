@@ -3,7 +3,7 @@
 ## Run the bot inside docker (Preferred way)
 
 - Download/Install docker from [here](https://www.docker.com/products/docker-desktop)
-- Setup the bot token inside `.env` file.
+- Setup the bot token inside `.env` file. (If you don't have this file, create it at the root of the project, based on `.env.example`)
 - A bot with the token you set up previously should already be a member of a discord server.
 - From the root folder of the project run `docker-compose up`. This will build the docker image and then run the bot. 
 - Wait until you see `Bot is ready! Waiting for commands...`
