@@ -1,3 +1,8 @@
 {
-    "prefix": "!"
+    "prefix": "!",
+    "roleNames":{
+        "newbie": "NUEVOS",
+        "member": "MIEMBROS",
+        "leaver": "DEJARON EL CLAN"
+    }
 }
