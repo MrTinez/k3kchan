@@ -82,7 +82,7 @@ class MemberCommandHandler {
 			}
 		}
 		else{
-			responseString += ', Not a clan member!\n';
+			responseString += ',\t Not a clan member!\n';
 		}
 		return responseString;
 	}
