@@ -58,7 +58,7 @@ class MemberCommandHandler {
 	}
 
 	getMemberResponseString(member, isClanMember, clanMemberSince, inCsv) {
-		let responseString = member.toString();
+		let responseString = member.displayName;
 		const roles = [];
 		member.roles.forEach(role => {
 			if(role.name != '@everyone') {
