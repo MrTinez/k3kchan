@@ -4,5 +4,6 @@
         "newbie": "NUEVOS",
         "member": "MIEMBROS",
         "leaver": "DEJARON EL CLAN"
-    }
+    },
+    "version": "0.1"
 }
