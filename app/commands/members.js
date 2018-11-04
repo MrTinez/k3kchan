@@ -33,6 +33,7 @@ class MemberCommandHandler {
 					if (member.nickname != undefined) {
 						memberName = member.nickname.split('#')[0];
 					}
+					memberName = memberName.toLowerCase().trim();
 					let isClanMember = false;
 					let clanMemberSince = undefined;
 					if (memberName in clanMembers) {
