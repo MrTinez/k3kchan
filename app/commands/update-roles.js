@@ -26,6 +26,7 @@ class MemberCommandHandler {
 					if (member.nickname != undefined) {
 						memberName = member.nickname.split('#')[0];
 					}
+					memberName = memberName.toLowerCase().trim();
 					const isClanMember = memberName in clanMembers;
 					this.validateClanMemberRoles(member, isClanMember, roleStages, message.channel);
 				}
