@@ -43,6 +43,7 @@ class MemberCommandHandler {
 					const responseString = this.getMemberResponseString(member, isClanMember, clanMemberSince, inCsv);
 					if(buffer.length + responseString.length > MAX_MESSAGE_STRING) {
 						message.channel.send(buffer);
+						buffer = '';
 						buffer += responseString;
 					}
 					else {
