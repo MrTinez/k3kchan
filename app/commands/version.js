@@ -6,4 +6,5 @@ module.exports = {
 	execute(message) {
 		message.channel.send(`Bot version: ${config.version}`);
 	},
+	adminOnly: false,
 };

@@ -1,6 +1,5 @@
-const request = require('request');
 const moment = require('moment');
-const config = require('./../config.json');
+const DestinyClan = require('./../helpers/destinyClan');
 
 const MAX_MESSAGE_STRING = 2000;
 const DATE_FORMAT = 'DD/MM/YYYY';
@@ -12,13 +11,13 @@ module.exports = {
 		const handler = new MemberCommandHandler();
 		handler.processMessage(message, args);
 	},
+	adminOnly: false,
 };
 
 class MemberCommandHandler {
 	processMessage(message, args) {
 		const inCsv = args.length > 0 && args[0] == 'csv';
 		const clan = new DestinyClan();
-		const roleStages = this.getRoleStages(message.guild.roles);
 		clan.getMembers((err) => {
 			message.channel.send('An error occurred when querying Bungie Clan Data!');
 			console.log(err);
@@ -40,7 +39,6 @@ class MemberCommandHandler {
 						isClanMember = true;
 						clanMemberSince = clanMembers[memberName];
 					}
-					clan.validateClanMemberRoles(member, isClanMember, roleStages);
 					const responseString = this.getMemberResponseString(member, isClanMember, clanMemberSince, inCsv);
 					if(buffer.length + responseString.length > MAX_MESSAGE_STRING) {
 						message.channel.send(buffer);
@@ -85,61 +83,5 @@ class MemberCommandHandler {
 			responseString += ',\t Not a clan member!\n';
 		}
 		return responseString;
-	}
-
-	getRoleStages(roles) {
-		const rolStages = {};
-		for (const key in config.roleNames) {
-			const guildRole = roles.find(x => x.name == config.roleNames[key]);
-			rolStages[key] = guildRole.id;
-		}
-		return rolStages;
-	}
-
-}
-
-class DestinyClan {
-	constructor() {
-		this.clanId = process.env.BUNGIE_CLAN_ID;
-		this.bungieApiKey = process.env.BUNGIE_API_KEY;
-	}
-
-	getMembers(errorCallback, callback) {
-		const uri = `https://www.bungie.net/Platform/GroupV2/${this.clanId}/Members/`;
-		request({
-			headers: {
-				'X-API-Key': this.bungieApiKey,
-			},
-			json: true,
-			uri: uri,
-		}, function(err, res, body) {
-			if(err) {
-				console.log(err);
-				errorCallback(err);
-			}
-			else{
-				const members = {};
-				body.Response.results.forEach(item => {
-					members[item.destinyUserInfo.displayName] = moment(item.joinDate);
-				});
-				callback(members);
-			}
-		});
-	}
-
-	validateClanMemberRoles(member, isClanMember, roleStages) {
-		if (member.roles.has(roleStages['member'])) {
-			if (!isClanMember) {
-				// is not a clan member and has the discord role for 'member'
-				// remove 'member' role and add 'leaver' role
-				member.removeRole(roleStages['member']).then(console.log).catch(console.error);
-				member.addRole(roleStages['leaver']).then(console.log).catch(console.error);
-			}
-		}
-		else if (member.roles.has(roleStages['newbie']) && isClanMember) {
-			// Is a 'newbie' and is already a clan member, so add 'member' role and remove the 'newbie'
-			member.removeRole(roleStages['newbie']).then(console.log).catch(console.error);
-			member.addRole(roleStages['member']).then(console.log).catch(console.error);
-		}
 	}
 }

@@ -1,9 +1,9 @@
 // load .env variables
 require('dotenv').config();
+const config = require('./config.json');
 
 // load config and command files
-const config = require('./config.json');
-const prefix = config.prefix;
+const prefix = process.env.COMMAND_PREFIX;
 const fs = require('fs');
 const commandFiles = fs.readdirSync('./app/commands').filter(file => file.endsWith('.js'));
 
@@ -26,15 +26,22 @@ client.on('ready', () => {
 
 // on message, route it to the proper command
 client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
-
+	if (!message.content.startsWith(prefix) || message.author.bot) {
+		return;
+	}
 	const args = message.content.slice(prefix.length).split(/ +/);
-	const command = args.shift().toLowerCase();
-
-	if (!client.commands.has(command)) return;
-
+	const commandName = args.shift().toLowerCase();
+	if (!client.commands.has(commandName)) {
+		return;
+	}
 	try {
-		client.commands.get(command).execute(message, args);
+		const command = client.commands.get(commandName);
+		if (command.adminOnly && message.member.roles.find(x => x.name == config.roleNames['admin']) == undefined) {
+			message.reply('You needd `' + config.roleNames['admin'] + '` permissions to execute this command!');
+			return;
+		}
+
+		command.execute(message, args);
 	}
 	catch (error) {
 		console.error(error);

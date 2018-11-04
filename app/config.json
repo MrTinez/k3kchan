@@ -1,9 +1,9 @@
 {
-    "prefix": "!",
     "roleNames":{
         "newbie": "Nuevos",
         "member": "Miembros",
-        "leaver": "LEAVERS"
+        "leaver": "Leavers",
+        "admin": "Administrador"
     },
-    "version": "0.1.1"
+    "version": "0.1.2"
 }

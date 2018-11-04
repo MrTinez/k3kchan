@@ -1,4 +1,4 @@
-const { prefix } = require('../config.json');
+const prefix = process.env.COMMAND_PREFIX;
 
 module.exports = {
 	name: 'help',
@@ -43,4 +43,5 @@ module.exports = {
 
 		message.channel.send(data, { split: true });
 	},
+	adminOnly: false,
 };
