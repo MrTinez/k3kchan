@@ -2,8 +2,8 @@ const request = require('request');
 const moment = require('moment');
 
 class DestinyClan {
-	constructor() {
-		this.clanId = process.env.BUNGIE_CLAN_ID;
+	constructor(clanId) {
+		this.clanId = clanId;
 		this.bungieApiKey = process.env.BUNGIE_API_KEY;
 	}
 

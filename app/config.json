@@ -3,7 +3,9 @@
         "newbie": "Nuevos",
         "member": "Miembros",
         "leaver": "Leavers",
-        "admin": "Administrador"
+        "admin": "Administrador",
+        "k3k": "k3k",
+        "k4k": "k4k"
     },
-    "version": "0.1.5"
+    "version": "0.2.0"
 }

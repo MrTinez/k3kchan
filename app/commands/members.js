@@ -17,43 +17,54 @@ module.exports = {
 class MemberCommandHandler {
 	processMessage(message, args) {
 		const inCsv = args.length > 0 && args[0] == 'csv';
-		const clan = new DestinyClan();
+		const clan = new DestinyClan(process.env.BUNGIE_CLAN_ID);
+		const secondClan = new DestinyClan(process.env.BUNGIE_2ND_CLAN_ID);
 		clan.getMembers((err) => {
 			message.channel.send('An error occurred when querying Bungie Clan Data!');
 			console.log(err);
 		},
 		(clanMembers) => {
-			const header = 'Member, [Roles], Joined Server Date, Joined Clan Date\n';
-			let buffer = '';
-			buffer += `Listing members of ${message.guild.name}:\n`;
-			buffer += header;
-			message.guild.members.forEach(member => {
-				if(!member.user.bot) {
-					let memberName = member.displayName;
-					if (member.nickname != undefined) {
-						memberName = member.nickname.split('#')[0];
+			// get the second clan members
+			secondClan.getMembers((err) => {
+				message.channel.send('An error occurred when querying Bungie Clan Data!');
+				console.log(err);
+			},
+			(secondClanMembers) => {
+				const header = 'Member, [Roles], Joined Server Date, Joined Clan Date\n';
+				let buffer = '';
+				buffer += `Listing members of ${message.guild.name}:\n`;
+				buffer += header;
+				message.guild.members.forEach(member => {
+					if(!member.user.bot) {
+						let memberName = member.displayName;
+						if (member.nickname != undefined) {
+							memberName = member.nickname.split('#')[0];
+						}
+						memberName = memberName.toLowerCase().trim();
+						let isClanMember = false;
+						let clanMemberSince = undefined;
+						if (memberName in clanMembers) {
+							isClanMember = true;
+							clanMemberSince = clanMembers[memberName];
+						}else if(memberName in secondClanMembers){
+							isClanMember = true;
+							clanMemberSince = secondClanMembers[memberName];
+						}
+						const responseString = this.getMemberResponseString(member, isClanMember, clanMemberSince, inCsv);
+						if(buffer.length + responseString.length > MAX_MESSAGE_STRING) {
+							message.channel.send(buffer);
+							buffer = '';
+							buffer += responseString;
+						}
+						else {
+							buffer += responseString;
+						}
 					}
-					memberName = memberName.toLowerCase().trim();
-					let isClanMember = false;
-					let clanMemberSince = undefined;
-					if (memberName in clanMembers) {
-						isClanMember = true;
-						clanMemberSince = clanMembers[memberName];
-					}
-					const responseString = this.getMemberResponseString(member, isClanMember, clanMemberSince, inCsv);
-					if(buffer.length + responseString.length > MAX_MESSAGE_STRING) {
-						message.channel.send(buffer);
-						buffer = '';
-						buffer += responseString;
-					}
-					else {
-						buffer += responseString;
-					}
+				});
+				if(buffer.length > 0) {
+					message.channel.send(buffer);
 				}
 			});
-			if(buffer.length > 0) {
-				message.channel.send(buffer);
-			}
 		});
 	}
 
