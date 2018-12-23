@@ -46,7 +46,8 @@ class MemberCommandHandler {
 						if (memberName in clanMembers) {
 							isClanMember = true;
 							clanMemberSince = clanMembers[memberName];
-						}else if(memberName in secondClanMembers){
+						}
+						else if(memberName in secondClanMembers) {
 							isClanMember = true;
 							clanMemberSince = secondClanMembers[memberName];
 						}

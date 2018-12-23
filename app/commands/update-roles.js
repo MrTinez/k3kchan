@@ -62,7 +62,7 @@ class MemberCommandHandler {
 			member.addRole(roleStages['leaver'].id).then(console.log).catch(console.error);
 			channel.send(member.displayName + ' leaved the clan!, changed his role to `' + roleStages['leaver'].name + '`');
 		}
-		
+
 		if (member.roles.has(roleStages['newbie'].id) && isInAnyClan) {
 			// If it has the role of newbie and it's a member of any clan:
 			// remove the newbie role and add the member role
