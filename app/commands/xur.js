@@ -2,7 +2,7 @@ const Vendors = require('../helpers/vendors');
 
 module.exports = {
 	name: 'xur',
-	aliases: ['xul'],
+	aliases: ['xul', 'xulo'],
 	description: 'Gets Xur\'s inventory.',
 	execute(message, args) {
 		const handler = new XurCommandHandler();
