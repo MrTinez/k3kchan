@@ -53,7 +53,7 @@ class MemberCommandHandler {
 						}
 						const responseString = this.getMemberResponseString(member, isClanMember, clanMemberSince, inCsv);
 						if(buffer.length + responseString.length > MAX_MESSAGE_STRING) {
-							message.channel.send(buffer);
+							message.channel.send(buffer, { split: true });
 							buffer = '';
 							buffer += responseString;
 						}
@@ -63,7 +63,7 @@ class MemberCommandHandler {
 					}
 				});
 				if(buffer.length > 0) {
-					message.channel.send(buffer);
+					message.channel.send(buffer, { split: true });
 				}
 			});
 		});
