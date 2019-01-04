@@ -13,20 +13,27 @@ module.exports = {
 
 class BansheeCommandHandler {
 	processMessage(message) {
-		const vendors = new Vendors();
+		try {
+			const vendors = new Vendors();
 
-		vendors.getBansheesInventory((err) => {
-			message.channel.send('An error occurred when querying vendors data!');
-			console.log(err);
-		},
-		(bansheeInventory) => {
-			message.channel.send(this.getBansheeInventoryMessage(bansheeInventory), { split: true });
-		});
+			vendors.getBansheesInventory((err) => {
+				message.channel.send('An error occurred when querying vendors data!');
+				console.log(err);
+			},  (bansheeInventory)=> {
+				try {
+					message.channel.send(this.getBansheeInventoryMessage(bansheeInventory), { split: true });
+				} catch (error) {
+					console.log(error)
+				}
+			});
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	getBansheeInventoryMessage(bansheeInventory) {
 		// if we don't get any data, return an error message
-		if(bansheeInventory == undefined) {
+		if (bansheeInventory == undefined) {
 			return 'Banshee\'s inventory data not available!';
 		}
 

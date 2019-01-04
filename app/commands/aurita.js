@@ -1,8 +1,8 @@
 const Vendors = require('../helpers/vendors');
 
 module.exports = {
-    name: 'aurita',
-    description: '',
+	name: 'aurita',
+	description: '',
 	execute(message, args) {
 		const handler = new XurCommandHandler();
 		handler.processMessage(message, args);
@@ -12,6 +12,10 @@ module.exports = {
 
 class XurCommandHandler {
 	processMessage(message) {
-		message.channel.send(`No, **Ahorita** no joven!`, { split: true });
+		try {
+			message.channel.send(`No, **Ahorita** no joven!`, { split: true });
+		} catch (error) {
+			console.log(error)
+		}
 	}
 }

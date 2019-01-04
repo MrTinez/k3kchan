@@ -9,25 +9,30 @@ class DestinyClan {
 
 	getMembers(errorCallback, callback) {
 		const uri = `https://www.bungie.net/Platform/GroupV2/${this.clanId}/Members/`;
-		request({
-			headers: {
-				'X-API-Key': this.bungieApiKey,
-			},
-			json: true,
-			uri: uri,
-		}, function(err, res, body) {
-			if(err) {
-				console.log(err);
-				errorCallback(err);
-			}
-			else{
-				const members = {};
-				body.Response.results.forEach(item => {
-					members[item.destinyUserInfo.displayName.toLowerCase().trim()] = moment(item.joinDate);
-				});
-				callback(members);
-			}
-		});
+		try {
+			request({
+				headers: {
+					'X-API-Key': this.bungieApiKey,
+				},
+				json: true,
+				uri: uri,
+			},  (err, res, body)=> {
+				if (err) {
+					console.log(err);
+					errorCallback(err);
+				}
+				else {
+					const members = {};
+					body.Response.results.forEach(item => {
+						members[item.destinyUserInfo.displayName.toLowerCase().trim()] = moment(item.joinDate);
+					});
+					callback(members);
+				}
+			});
+		} catch (err) {
+			console.log(err);
+			errorCallback(err);
+		}
 	}
 }
 

@@ -26,24 +26,24 @@ client.on('ready', () => {
 
 // on message, route it to the proper command
 client.on('message', message => {
-	if (!message.content.startsWith(prefix) || message.author.bot) {
-		return;
-	}
-	const args = message.content.slice(prefix.length).split(/ +/);
-	let commandName = args.shift().toLowerCase();
-	if (!client.commands.has(commandName)) {
-		const commandByAlias = client.commands.find(c => c.aliases && c.aliases.includes(commandName));
-		if(commandByAlias == undefined) {
-			return;
-		} else {
-			if (commandName == 'xul') { 
-				message.channel.send('¿No quisiste decir `Xur` con "R"?');
-			}
-
-			commandName = commandByAlias.name;
-		}
-	}
 	try {
+		if (!message.content.startsWith(prefix) || message.author.bot) {
+			return;
+		}
+		const args = message.content.slice(prefix.length).split(/ +/);
+		let commandName = args.shift().toLowerCase();
+		if (!client.commands.has(commandName)) {
+			const commandByAlias = client.commands.find(c => c.aliases && c.aliases.includes(commandName));
+			if(commandByAlias == undefined) {
+				return;
+			} else {
+				if (commandName == 'xul') { 
+					message.channel.send('¿No quisiste decir `Xur` con "R"?');
+				}
+	
+				commandName = commandByAlias.name;
+			}
+		}
 		const command = client.commands.get(commandName);
 		if (command.adminOnly && message.member.roles.find(x => x.name == config.roleNames['admin']) == undefined) {
 			message.reply('You needd `' + config.roleNames['admin'] + '` permissions to execute this command!');

@@ -13,20 +13,27 @@ module.exports = {
 
 class SpiderCommandHandler {
 	processMessage(message) {
-		const vendors = new Vendors();
+		try {
+			const vendors = new Vendors();
 
-		vendors.getSpidersInventory((err) => {
-			message.channel.send('An error occurred when querying vendors data!');
-			console.log(err);
-		},
-		(spidersInventory) => {
-			message.channel.send(this.getSpidersInventoryMessage(spidersInventory), { split: true });
-		});
+			vendors.getSpidersInventory((err) => {
+				message.channel.send('An error occurred when querying vendors data!');
+				console.log(err);
+			},  (spidersInventory)=> {
+				try {
+					message.channel.send(this.getSpidersInventoryMessage(spidersInventory), { split: true });
+				} catch (error) {
+					console.log(error)
+				}
+			});
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	getSpidersInventoryMessage(spidersInventory) {
 		// if we don't get any data, return an error message
-		if(spidersInventory == undefined) {
+		if (spidersInventory == undefined) {
 			return 'Spider\'s inventory data not available!';
 		}
 

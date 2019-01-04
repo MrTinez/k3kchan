@@ -13,35 +13,45 @@ module.exports = {
 
 class MemberCommandHandler {
 	processMessage(message) {
-		const clan = new DestinyClan(process.env.BUNGIE_CLAN_ID);
-		const secondClan = new DestinyClan(process.env.BUNGIE_2ND_CLAN_ID);
-		const roleStages = this.getRoleStages(message.guild.roles);
-		clan.getMembers((err) => {
-			message.channel.send('An error occurred when querying Bungie Clan Data!');
-			console.log(err);
-		},
-		(clanMembers) => {
-			// get the second clan members
-			secondClan.getMembers((err) => {
+		try {
+			const clan = new DestinyClan(process.env.BUNGIE_CLAN_ID);
+			const secondClan = new DestinyClan(process.env.BUNGIE_2ND_CLAN_ID);
+			const roleStages = this.getRoleStages(message.guild.roles);
+			clan.getMembers( (err)=> {
 				message.channel.send('An error occurred when querying Bungie Clan Data!');
 				console.log(err);
-			},
-			(secondClanMembers) => {
-				message.guild.members.forEach(member => {
-					if(!member.user.bot) {
-						let memberName = member.displayName;
-						if (member.nickname != undefined) {
-							memberName = member.nickname.split('#')[0];
+			},  (clanMembers)=> {
+				try {
+					// get the second clan members
+					secondClan.getMembers( (err)=> {
+						message.channel.send('An error occurred when querying Bungie Clan Data!');
+						console.log(err);
+					},  (secondClanMembers) =>{
+						try {
+							message.guild.members.forEach(member => {
+								if (!member.user.bot) {
+									let memberName = member.displayName;
+									if (member.nickname != undefined) {
+										memberName = member.nickname.split('#')[0];
+									}
+									memberName = memberName.toLowerCase().trim();
+									const isClanMember = memberName in clanMembers;
+									const isSecondClanMember = memberName in secondClanMembers;
+									this.validateClanMemberRoles(member, isClanMember, isSecondClanMember, roleStages, message.channel);
+								}
+							});
+							message.channel.send('Finished updating member roles.');
+						} catch (error) {
+							console.log(error)
 						}
-						memberName = memberName.toLowerCase().trim();
-						const isClanMember = memberName in clanMembers;
-						const isSecondClanMember = memberName in secondClanMembers;
-						this.validateClanMemberRoles(member, isClanMember, isSecondClanMember, roleStages, message.channel);
-					}
-				});
-				message.channel.send('Finished updating member roles.');
+					});
+				} catch (error) {
+					console.log(error)
+				}
 			});
-		});
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	getRoleStages(roles) {

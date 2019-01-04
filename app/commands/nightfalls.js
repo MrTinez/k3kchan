@@ -13,20 +13,27 @@ module.exports = {
 
 class NightfallCommandHandler {
 	processMessage(message) {
-		const vendors = new Vendors();
+		try {
+			const vendors = new Vendors();
 
-		vendors.getActiveNightfalls((err) => {
-			message.channel.send('An error occurred when querying vendors data!');
-			console.log(err);
-		},
-		(activeNightfalls) => {
-			message.channel.send(this.getActiveNightfallsMessage(activeNightfalls), { split: true });
-		});
+			vendors.getActiveNightfalls((err) => {
+				message.channel.send('An error occurred when querying vendors data!');
+				console.log(err);
+			},  (activeNightfalls)=> {
+				try {
+					message.channel.send(this.getActiveNightfallsMessage(activeNightfalls), { split: true });
+				} catch (error) {
+					console.log(error)
+				}
+			});
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	getActiveNightfallsMessage(activeNightfalls) {
 		// if we don't get any data, return an error message
-		if(activeNightfalls == undefined) {
+		if (activeNightfalls == undefined) {
 			return 'Nightfalls data not available!';
 		}
 

@@ -16,84 +16,95 @@ module.exports = {
 
 class MemberCommandHandler {
 	processMessage(message, args) {
-		const inCsv = args.length > 0 && args[0] == 'csv';
-		const clan = new DestinyClan(process.env.BUNGIE_CLAN_ID);
-		const secondClan = new DestinyClan(process.env.BUNGIE_2ND_CLAN_ID);
-		clan.getMembers((err) => {
-			message.channel.send('An error occurred when querying Bungie Clan Data!');
-			console.log(err);
-		},
-		(clanMembers) => {
-			// get the second clan members
-			secondClan.getMembers((err) => {
+		try {
+			const inCsv = args.length > 0 && args[0] == 'csv';
+			const clan = new DestinyClan(process.env.BUNGIE_CLAN_ID);
+			const secondClan = new DestinyClan(process.env.BUNGIE_2ND_CLAN_ID);
+			clan.getMembers((err) => {
 				message.channel.send('An error occurred when querying Bungie Clan Data!');
 				console.log(err);
-			},
-			(secondClanMembers) => {
-				const header = 'Member, [Roles], Joined Server Date, Joined Clan Date\n';
-				let buffer = '';
-				buffer += `Listing members of ${message.guild.name}:\n`;
-				buffer += header;
-				message.guild.members.forEach(member => {
-					if(!member.user.bot) {
-						let memberName = member.displayName;
-						if (member.nickname != undefined) {
-							memberName = member.nickname.split('#')[0];
-						}
-						memberName = memberName.toLowerCase().trim();
-						let isClanMember = false;
-						let clanMemberSince = undefined;
-						if (memberName in clanMembers) {
-							isClanMember = true;
-							clanMemberSince = clanMembers[memberName];
-						}
-						else if(memberName in secondClanMembers) {
-							isClanMember = true;
-							clanMemberSince = secondClanMembers[memberName];
-						}
-						const responseString = this.getMemberResponseString(member, isClanMember, clanMemberSince, inCsv);
-						if(buffer.length + responseString.length > MAX_MESSAGE_STRING) {
-							message.channel.send(buffer, { split: true });
-							buffer = '';
-							buffer += responseString;
-						}
-						else {
-							buffer += responseString;
-						}
-					}
-				});
-				if(buffer.length > 0) {
-					message.channel.send(buffer, { split: true });
+			}, (clanMembers) => {
+				try {
+					// get the second clan members
+					secondClan.getMembers((err) => {
+						message.channel.send('An error occurred when querying Bungie Clan Data!');
+						console.log(err);
+					},
+						(secondClanMembers) => {
+							try {
+								const header = 'Member, [Roles], Joined Server Date, Joined Clan Date\n';
+								let buffer = '';
+								buffer += `Listing members of ${message.guild.name}:\n`;
+								buffer += header;
+								message.guild.members.forEach(member => {
+									if (!member.user.bot) {
+										let memberName = member.displayName;
+										if (member.nickname != undefined) {
+											memberName = member.nickname.split('#')[0];
+										}
+										memberName = memberName.toLowerCase().trim();
+										let isClanMember = false;
+										let clanMemberSince = undefined;
+										if (memberName in clanMembers) {
+											isClanMember = true;
+											clanMemberSince = clanMembers[memberName];
+										}
+										else if (memberName in secondClanMembers) {
+											isClanMember = true;
+											clanMemberSince = secondClanMembers[memberName];
+										}
+										const responseString = this.getMemberResponseString(member, isClanMember, clanMemberSince, inCsv);
+										if (buffer.length + responseString.length > MAX_MESSAGE_STRING) {
+											message.channel.send(buffer, { split: true });
+											buffer = '';
+											buffer += responseString;
+										}
+										else {
+											buffer += responseString;
+										}
+									}
+								});
+								if (buffer.length > 0) {
+									message.channel.send(buffer, { split: true });
+								}
+							} catch (error) {
+								console.log(error)
+							}
+						});
+				} catch (error) {
+					console.log(error)
 				}
 			});
-		});
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	getMemberResponseString(member, isClanMember, clanMemberSince, inCsv) {
 		let responseString = member.displayName;
 		const roles = [];
 		member.roles.forEach(role => {
-			if(role.name != '@everyone') {
+			if (role.name != '@everyone') {
 				roles.push(role.name);
 			}
 		});
-		if(inCsv) {
+		if (inCsv) {
 			responseString += `, [${roles.join(' - ')}]`;
 			responseString += `, ${moment(member.joinedAt).format(DATE_FORMAT)}`;
 		}
-		else{
+		else {
 			responseString += `\t-\t Roles: [${roles.join(' - ')}]`;
 			responseString += `\t-\t Joined Server: ${moment(member.joinedAt).format(DATE_FORMAT)}`;
 		}
 		if (isClanMember) {
-			if(inCsv) {
+			if (inCsv) {
 				responseString += `, ${clanMemberSince.format(DATE_FORMAT)}\n`;
 			}
-			else{
+			else {
 				responseString += `\t-\t Joined Clan: ${clanMemberSince.format(DATE_FORMAT)}\n`;
 			}
 		}
-		else{
+		else {
 			responseString += ',\t Not a clan member!\n';
 		}
 		return responseString;

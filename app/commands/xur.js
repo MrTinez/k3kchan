@@ -13,28 +13,42 @@ module.exports = {
 
 class XurCommandHandler {
 	processMessage(message) {
-		const vendors = new Vendors();
-
-		vendors.getXurInventory((err) => {
-			message.channel.send('An error occurred when querying vendors data!');
-			console.log(err);
-		},
-		(xurInventory) => {
-			message.channel.send(this.getXurInventoryMessage(xurInventory), { split: true });
-		});
-
-		vendors.getXurLocation((err) => {
-			message.channel.send('An error occurred when querying vendors data!');
-			console.log(err);
-		},
-		(xurLocation) => {
-			message.channel.send(`Xur is in ${xurLocation}`, { split: true });
-		});
+		try {
+			const vendors = new Vendors();
+			vendors.getXurInventory((err) => {
+				message.channel.send('An error occurred when querying vendors data!');
+				console.log(err);
+			}, (xurInventory) => {
+				try {
+					message.channel.send(this.getXurInventoryMessage(xurInventory), { split: true });
+					if (xurInventory != undefined) {
+						vendors.getXurLocation((err) => {
+							try {
+								message.channel.send('An error occurred when querying vendors data!');
+								console.log(err);
+							} catch (error) {
+								console.log(error)
+							}
+						}, (xurLocation) => {
+							try {
+								message.channel.send(`Xur is in ${xurLocation}`, { split: true });
+							} catch (error) {
+								console.log(error)
+							}
+						});
+					}
+				} catch (error) {
+					console.log(error)
+				}
+			});
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	getXurInventoryMessage(xurInventory) {
 		// if we don't get any data, return an error message
-		if(xurInventory == undefined || xurInventory.xurweapon == undefined || xurInventory.xurweapon == undefined) {
+		if (xurInventory == undefined || xurInventory.xurweapon == undefined || xurInventory.xurweapon == undefined) {
 			return 'Xur data not available!';
 		}
 
