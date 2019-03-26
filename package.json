@@ -2,7 +2,7 @@
   "name": "k3kchan",
   "version": "0.0.1",
   "description": "k3kchan - El bot del K3K",
-  "main": "./app/index.js",
+  "main": "./app/k3kchan.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
