@@ -4,8 +4,7 @@
         "member": "Miembros",
         "leaver": "Leavers",
         "admin": "Administrador",
-        "k3k": "k3k",
-        "k4k": "k4k"
+        "k3k": "k3k"
     },
     "version": "0.6.0"
 }
