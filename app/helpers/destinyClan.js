@@ -16,9 +16,9 @@ class DestinyClan {
 				},
 				json: true,
 				uri: uri,
-			},  (err, res, body)=> {
+			}, (err, res, body)=> {
 				if (err) {
-					console.log(err);
+					console.error(err);
 					errorCallback(err);
 				}
 				else {
@@ -29,8 +29,9 @@ class DestinyClan {
 					callback(members);
 				}
 			});
-		} catch (err) {
-			console.log(err);
+		}
+		catch (err) {
+			console.error(err);
 			errorCallback(err);
 		}
 	}

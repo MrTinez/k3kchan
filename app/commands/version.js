@@ -6,8 +6,9 @@ module.exports = {
 	execute(message) {
 		try {
 			message.channel.send(`Bot version: ${config.version}`);
-		} catch (error) {
-			console.log(error)
+		}
+		catch (error) {
+			console.error(error);
 		}
 	},
 	adminOnly: false,
