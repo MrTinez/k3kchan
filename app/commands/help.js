@@ -43,8 +43,9 @@ module.exports = {
 			data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 
 			message.channel.send(data, { split: true });
-		} catch (error) {
-			console.log(error)
+		}
+		catch (error) {
+			console.error(error);
 		}
 	},
 	adminOnly: false,

@@ -4,8 +4,9 @@ module.exports = {
 	execute(message) {
 		try {
 			message.channel.send(`Your username: ${message.author.username}\nYour ID: ${message.author.id}`);
-		} catch (error) {
-			console.log(error)
+		}
+		catch (error) {
+			console.error(error);
 		}
 	},
 	adminOnly: false,

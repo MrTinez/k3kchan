@@ -36,11 +36,8 @@ client.on('message', message => {
 			const commandByAlias = client.commands.find(c => c.aliases && c.aliases.includes(commandName));
 			if(commandByAlias == undefined) {
 				return;
-			} else {
-				if (commandName == 'xul') { 
-					message.channel.send('¿No quisiste decir `Xur` con "R"?');
-				}
-	
+			}
+			else {
 				commandName = commandByAlias.name;
 			}
 		}
