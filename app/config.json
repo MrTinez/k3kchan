@@ -2,9 +2,9 @@
     "roleNames":{
         "newbie": "Nuevos",
         "member": "Miembros",
-        "leaver": "Leavers",
         "admin": "Administrador",
-        "k3k": "k3k"
+        "k3k": "k3k",
+        "invite": "Invitados"
     },
-    "version": "0.6.0"
+    "version": "0.7.0"
 }

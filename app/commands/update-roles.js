@@ -56,10 +56,10 @@ class MemberCommandHandler {
 	validateClanMemberRoles(member, isClanMember, roleStages, channel) {
 		if (!isClanMember && member.roles.has(roleStages['member'].id)) {
 			// is not in any clan and has the discord role for 'member'
-			// remove 'member' role and add 'leaver' role
+			// remove 'member' role and add 'invite' role
 			member.removeRole(roleStages['member'].id);
-			member.addRole(roleStages['leaver'].id);
-			channel.send(member.displayName + ' leaved the clan!, changed his role to `' + roleStages['leaver'].name + '`');
+			member.addRole(roleStages['invite'].id);
+			channel.send(member.displayName + ' leaved the clan!, changed his role to `' + roleStages['invite'].name + '`');
 		}
 
 		if (member.roles.has(roleStages['newbie'].id) && isClanMember) {
@@ -70,14 +70,15 @@ class MemberCommandHandler {
 			channel.send(member.displayName + ' has `' + roleStages['newbie'].name + '` role but is part of the clan, changed his role to `' + roleStages['member'].name + '`');
 		}
 
-		if (member.roles.has(roleStages['leaver'].id) && isClanMember) {
+		if (member.roles.has(roleStages['invite'].id) && isClanMember) {
 			// If it has the role of a leaver and it's a member of any clan:
 			// remove the leaver role and add the member role
-			member.removeRole(roleStages['leaver'].id);
+			member.removeRole(roleStages['invite'].id);
 			member.addRole(roleStages['member'].id);
-			channel.send(member.displayName + ' has `' + roleStages['leaver'].name + '` role but is part of the clan, changed his role to `' + roleStages['member'].name + '`');
+			channel.send(member.displayName + ' has `' + roleStages['invite'].name + '` role but is part of the clan, changed his role to `' + roleStages['member'].name + '`');
 		}
 
+		
 		if (!member.roles.has(roleStages['k3k'].id) && isClanMember) {
 			// If it doesn't have the role of k3k clan and is a clan member
 			// remove the other clan role and add this clan role
