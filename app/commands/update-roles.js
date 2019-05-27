@@ -62,19 +62,23 @@ class MemberCommandHandler {
 			channel.send(member.displayName + ' left the clan!, changed his role to `' + roleStages['invite'].name + '`');
 		}
 
-		if (member.roles.has(roleStages['newbie'].id) && isClanMember) {
-			// If it has the role of newbie and it's a member of any clan:
-			// remove the newbie role and add the member role
-			member.removeRole(roleStages['newbie'].id);
-			member.addRole(roleStages['member'].id);
-			channel.send(member.displayName + ' has `' + roleStages['newbie'].name + '` role but is part of the clan, changed his role to `' + roleStages['member'].name + '`');
+		if (member.roles.has(roleStages['newbie'].id)) {
+			if(isClanMember){
+				// If it has the role of newbie and it's a member of any clan:
+				// remove the newbie role and add the member role
+				member.removeRole(roleStages['newbie'].id);
+				member.addRole(roleStages['member'].id);
+				channel.send(member.displayName + ' has `' + roleStages['newbie'].name + '` role but is part of the clan, changed his role to `' + roleStages['member'].name + '`');
+			}
+			else {
+				//If it is not a member, add invite role
+				member.removeRole(roleStages['newbie'].id);
+				member.addRole(roleStages['invite'].id);
+				channel.send(member.displayName + ' has `' + roleStages['newbie'].name + '` role but is NOT part of the clan, changed his role to `' + roleStages['invite'].name + '`');
+			}
 		}
-		else {
-			//If it is not a member, add invite role
-			member.removeRole(roleStages['newbie'].id);
-			member.addRole(roleStages['invite'].id);
-			channel.send(member.displayName + ' has `' + roleStages['newbie'].name + '` role but is NOT part of the clan, changed his role to `' + roleStages['invite'].name + '`');
-		}
+
+		
 
 		if (member.roles.has(roleStages['invite'].id) && isClanMember) {
 			// If it has the role of a leaver and it's a member of any clan:
