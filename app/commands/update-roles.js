@@ -59,7 +59,7 @@ class MemberCommandHandler {
 			// remove 'member' role and add 'invite' role
 			member.removeRole(roleStages['member'].id);
 			member.addRole(roleStages['invite'].id);
-			channel.send(member.displayName + ' leaved the clan!, changed his role to `' + roleStages['invite'].name + '`');
+			channel.send(member.displayName + ' left the clan!, changed his role to `' + roleStages['invite'].name + '`');
 		}
 
 		if (member.roles.has(roleStages['newbie'].id) && isClanMember) {
@@ -68,6 +68,12 @@ class MemberCommandHandler {
 			member.removeRole(roleStages['newbie'].id);
 			member.addRole(roleStages['member'].id);
 			channel.send(member.displayName + ' has `' + roleStages['newbie'].name + '` role but is part of the clan, changed his role to `' + roleStages['member'].name + '`');
+		}
+		else {
+			//If it is not a member, add invite role
+			member.removeRole(roleStages['newbie'].id);
+			member.addRole(roleStages['invite'].id);
+			channel.send(member.displayName + ' has `' + roleStages['newbie'].name + '` role but is NOT part of the clan, changed his role to `' + roleStages['invite'].name + '`');
 		}
 
 		if (member.roles.has(roleStages['invite'].id) && isClanMember) {
