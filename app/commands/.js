@@ -21,7 +21,6 @@ class MemberCommandHandler {
 				console.error(err);
 			}, (clanMembers)=> {
 				try {
-					const discordMembers = {};
 					message.guild.members.forEach(member => {
 						if (!member.user.bot) {
 							let memberName = member.displayName;
@@ -30,18 +29,10 @@ class MemberCommandHandler {
 							}
 							memberName = memberName.toLowerCase().trim();
 							const isClanMember = memberName in clanMembers;
-							discordMembers[memberName] = true;
 							this.validateClanMemberRoles(member, isClanMember, roleStages, message.channel);
 						}
 					});
 					message.channel.send('Finished updating member roles.');
-					message.channel.send('Checking for bungie members not in discord...');
-					for (const bungieMember in clanMembers) {
-						if (!(bungieMember in discordMembers)) {
-							message.channel.send(bungieMember + ' is part of bungie clan but is not in the discord server');
-						}
-					}
-					message.channel.send('Finished checking bungie members!');
 				}
 				catch (error) {
 					console.error(error);

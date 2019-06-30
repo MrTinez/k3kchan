@@ -4,7 +4,8 @@
         "member": "Miembros",
         "admin": "Administrador",
         "k3k": "k3k",
-        "invite": "Invitados"
+        "invite": "Invitados",
+        "sherpa": "Sherpa"
     },
-    "version": "0.8.0"
+    "version": "1.0.0"
 }
