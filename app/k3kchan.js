@@ -1,7 +1,7 @@
 // load .env variables
 require('dotenv').config();
 
-const MemberCommandHandler = require('./helpers/clanMembers');
+const clanMemberHandler = require('./helpers/clanMembers');
 const config = require('./config.json');
 
 
@@ -58,9 +58,12 @@ client.on('message', message => {
 	}
 });
 
-client.on('guildMemberUpdate', (oldMember, newMember) => {  // this event triggers when a member changes their nickname.
-	const memberHandler = new clanMember();
-	handler.processMessage(newMember);
+client.on('guildMemberUpdate', (oldMember, newMember) => {
+	const memberHandler = new clanMemberHandler();
+	if(newMember.displayName != oldMember.displayName) {
+		memberHandler.processMember(newMember);
+	}
+
 });
 
 // start the bot

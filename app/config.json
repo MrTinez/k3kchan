@@ -1,10 +1,9 @@
 {
     "roleNames":{
-        "newbie": "Nuevos",
-        "member": "Miembros",
+        "newbie": "SinJuegos",
+        "member": "Komoditos",
         "admin": "Administrador",
-        "k3k": "k3k",
-        "invite": "Invitados",
+        "invite": "Invitados-D2",
         "sherpa": "Sherpa"
     },
     "version": "1.1.0"
