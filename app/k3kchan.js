@@ -1,6 +1,9 @@
 // load .env variables
 require('dotenv').config();
+
+const MemberCommandHandler = require('./helpers/clanMembers');
 const config = require('./config.json');
+
 
 // load config and command files
 const prefix = process.env.COMMAND_PREFIX;
@@ -43,7 +46,7 @@ client.on('message', message => {
 		}
 		const command = client.commands.get(commandName);
 		if (command.adminOnly && message.member.roles.find(x => x.name == config.roleNames['admin'] || x.name == config.roleNames['sherpa']) == undefined) {
-			message.reply('You needd `' + config.roleNames['admin'] + '` permissions to execute this command!');
+			message.reply('You need `' + config.roleNames['admin'] + '` permissions to execute this command!');
 			return;
 		}
 
@@ -53,6 +56,11 @@ client.on('message', message => {
 		console.error(error);
 		message.reply('there was an error trying to execute that command!');
 	}
+});
+
+client.on('guildMemberUpdate', (oldMember, newMember) => {  // this event triggers when a member changes their nickname.
+	const memberHandler = new clanMember();
+	handler.processMessage(newMember);
 });
 
 // start the bot
