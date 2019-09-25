@@ -1,6 +1,6 @@
 {
   "name": "k3kchan",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "k3kchan - El bot del K3K",
   "main": "./app/k3kchan.js",
   "scripts": {

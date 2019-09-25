@@ -50,9 +50,11 @@ class clanMemberHandler {
 								memberName = member.nickname.split('#')[0];
 							}
 							memberName = memberName.toLowerCase().trim();
-							const isClanMember = memberName in clanMembers;
+							const clanData = clanMembers[memberName];
+							const isClanMember = clanData != undefined;
+							const memberType = clanData == undefined ? -1 : clanData.memberType;
 							discordMembers[memberName] = true;
-							this.validateClanMemberRoles(member, isClanMember, roleStages, message.channel);
+							this.validateClanMemberRoles(member, isClanMember, roleStages, message.channel, memberType);
 						}
 					});
 					message.channel.send('Finished updating member roles.');
@@ -92,7 +94,10 @@ class clanMemberHandler {
 		return rolStages;
 	}
 
-	validateClanMemberRoles(member, isClanMember, roleStages, channel) {
+	validateClanMemberRoles(member, isClanMember, roleStages, channel, memberType) {
+		if (member.displayName == 'Garo') {
+			console.log(member, isClanMember, roleStages, channel, memberType);
+		}
 		if (!isClanMember && member.roles.has(roleStages['member'].id)) {
 			// is not in any clan and has the discord role for 'member'
 			// remove 'member' role and add 'invite' role
@@ -107,6 +112,19 @@ class clanMemberHandler {
 			member.removeRole(roleStages['invite'].id);
 			member.addRole(roleStages['member'].id);
 			channel.send(member.displayName + ' has `' + roleStages['invite'].name + '` role but is part of the clan, changed his role to `' + roleStages['member'].name + '`');
+		}
+
+		if(memberType != config.beginnersBungieClanMemberType) {
+			// member is not a beginner, make sure he doesn't have that role
+			if (member.roles.has(roleStages['beginner'].id)) {
+				member.removeRole(roleStages['beginner'].id);
+				channel.send(member.displayName + ' has `' + roleStages['beginner'].name + '` role but is not a Clan Beginner. Role removed.');
+			}
+		}
+		else if(!member.roles.has(roleStages['beginner'].id)) {
+			// if the member is a beginner, and does not have the role, assign it to him
+			member.addRole(roleStages['beginner'].id);
+			channel.send(member.displayName + ' is a clan Beginner, assigning Role `' + roleStages['beginner'].name + '`');
 		}
 	}
 }

@@ -24,7 +24,10 @@ class DestinyClan {
 				else {
 					const members = {};
 					body.Response.results.forEach(item => {
-						members[item.destinyUserInfo.displayName.toLowerCase().trim()] = moment(item.joinDate);
+						members[item.destinyUserInfo.displayName.toLowerCase().trim()] = {
+							joinDate: moment(item.joinDate),
+							memberType: item.memberType,
+						};
 					});
 					callback(members);
 				}
