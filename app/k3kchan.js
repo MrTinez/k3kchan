@@ -45,7 +45,7 @@ client.on('message', message => {
 			}
 		}
 		const command = client.commands.get(commandName);
-		if (command.adminOnly && message.member.roles.find(x => x.name == config.roleNames['admin'] || x.name == config.roleNames['sherpa']) == undefined) {
+		if (command.adminOnly && message.member.roles.find(x => x.name == config.roleNames['admin'] || x.name == config.roleNames['mod']) == undefined) {
 			message.reply('You need `' + config.roleNames['admin'] + '` permissions to execute this command!');
 			return;
 		}
